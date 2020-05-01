@@ -23,5 +23,5 @@ setup(
     author='Ada Donder',
     author_email='adadonderr@gmail.com',
     keywords="ARP, DNS, spoof, poison, gateway",
-    install_requires=['scapy']
+    install_requires=['scapy', 'netfilterqueue']
 )

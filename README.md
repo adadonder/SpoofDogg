@@ -1,6 +1,7 @@
 # SpoofDogg
 SpoofDogg is a tool that initially starts an ARP spoofing attack.
-It can also be started to initiate an automatic DNS spoofing attack afterwards as well
+It can also be started to initiate an automatic DNS spoofing attack afterwards as well.
+## Installation
 ````
 $ python3 setup.py install
 ````
@@ -9,6 +10,7 @@ or
 $ pip install .
 ````
 
+## Usage
 Be sure to run with ``python3``.
 ```
 usage: spoofdogg.py [-h] [-dns] target host
@@ -27,8 +29,13 @@ optional arguments:
                      Linux machines due to iptables usage.
 
 ```
-<ANY ADDITIONAL INFO>
+In the directory is a file called ```hosts.txt```. This file format is as follows:
+```<domain_request>:<ip_address_to_redirect>```
 
-<NAME> is released under the Apache 2.0 license. See [LICENSE](https://github.com/adadonder/SpoofDogg/blob/master/LICENSE) for details.
+Feel free to add your own configuration.
 
+## License
+SpoofDogg is released under the Apache 2.0 license. See [LICENSE](https://github.com/adadonder/SpoofDogg/blob/master/LICENSE) for details.
+
+## Contact
 Feel free to contact me via e-mail: adadonderr@gmail.com
