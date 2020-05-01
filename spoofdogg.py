@@ -36,7 +36,7 @@ def dns_check():
         sys.exit("DNS spoofing is only available for machines running a Linux distro.")
 
 
-def spoof():
+def spoofy():
 
     # Get target and host
     target, host = get_arguments()
@@ -58,18 +58,25 @@ def spoof():
         
         
 def main():
+
+    target, host = get_arguments()
     # Check DNS compatibility
     dns_check()
 
     # Enable ip forwarding for the system
     enable_ip_routing()
+    try:
+        arper = multiprocessing.Process(target=spoofy)
+        arper.start()
 
-    arper = multiprocessing.Process(target=spoof)
-    arper.start()
-
-    if args.dns_spoof:
-        dns_spoofer = multiprocessing.Process(target=dns_main())
-        dns_spoofer.start()
+        if args.dns_spoof:
+            dns_spoofer = multiprocessing.Process(target=dns_main())
+            dns_spoofer.start()
+    except KeyboardInterrupt:
+        restore(target, host)
+        restore(host, target)
+        if args.dns_spoof:
+            os.system("iptables --flush")
 
 
 if __name__ == '__main__':

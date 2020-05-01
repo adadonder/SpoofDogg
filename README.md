@@ -10,7 +10,7 @@ or
 $ pip install .
 ````
 
-## Usage
+## Usagez
 Be sure to run with ``python3``.
 ```
 usage: spoofdogg.py [-h] [-dns] target host

@@ -3,7 +3,7 @@ import sys
 from scapy.layers.dns import DNSRR, DNSQR, DNS
 from scapy.layers.inet import IP, UDP
 import os
-import netfilterqueue
+from netfilterqueue import NetfilterQueue
 
 hosts_file = "./hosts.txt"
 dns_hosts = {}
